@@ -61,3 +61,5 @@ crashlytics-build.properties
 #Custom ignores
 Assets/Plugins/NGTools
 Assets/Plugins/NGTools.meta
+Assets/ThirdParty
+Assets/ThirdParty.meta
