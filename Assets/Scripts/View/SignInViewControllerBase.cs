@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,6 +38,9 @@ namespace Azirel.View
 
 		public event Action OnSignInButtonPressed;
 
+		protected virtual void Start()
+			=> _signInButton.onClick.AddListener(FireOnSignInButtonPressedEvent);
+
 		protected virtual void CreateTextPairViews(IEnumerable<Tuple<string, string>> stringPairs)
 		{
 			foreach (var stringPair in stringPairs)
@@ -53,5 +57,8 @@ namespace Azirel.View
 				Destroy(pair.Value.gameObject);
 			_currentStringPairs.Clear();
 		}
+
+		private void FireOnSignInButtonPressedEvent()
+			=> OnSignInButtonPressed?.Invoke();
 	} 
 }
