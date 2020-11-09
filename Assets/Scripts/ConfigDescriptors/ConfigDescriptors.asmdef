@@ -1,0 +1,19 @@
+{
+    "name": "ConfigDescriptors",
+    "references": [
+        "GUID:78836dd01af44574193a3b891b8b66ff"
+    ],
+    "includePlatforms": [
+        "Android",
+        "Editor",
+        "iOS"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
