@@ -1,10 +1,7 @@
 {
-    "name": "Controllers",
+    "name": "Requests",
     "references": [
-        "GUID:de3351152959b0c47818d3a4a8cdb88e",
-        "GUID:612fd31d72959d94e96c6f96560e9497",
-        "GUID:78836dd01af44574193a3b891b8b66ff",
-        "GUID:8af47821b6fe6ff4e96397ff60a9e34b"
+        "GUID:78836dd01af44574193a3b891b8b66ff"
     ],
     "includePlatforms": [
         "Android",

@@ -14,6 +14,7 @@ namespace Azirel.Controllers
 		public SignInViewControllerBase ViewImplementation;
 
 		protected ISignInViewBase _view;
+		protected GoogleOAuthCodeExchangeRequest _codeExchangeRequest;
 
 		protected virtual void Start()
 		{
@@ -32,9 +33,19 @@ namespace Azirel.Controllers
 		{
 			var queriesRawString = link.Replace(GoogleOAuthConfig.RedirectUri, string.Empty);
 			var queriesCollection = QueryStringsUtilities.ConvertStringQueries(queriesRawString);
-			foreach (var key in queriesCollection.AllKeys)
-				print($"{key}:{queriesCollection[key]}");
+			var queriesForCodeExchange = new NameValueCollection()
+			{
+				{ "client_id", GoogleOAuthConfig.ClientID },
+				{ "redirect_uri", GoogleOAuthConfig.RedirectUri },
+				{ "grant_type", "authorization_code" },
+				{ "code",  queriesCollection["code"] }
+			};
+			_codeExchangeRequest = new GoogleOAuthCodeExchangeRequest(queriesForCodeExchange);
+			_codeExchangeRequest.RequestExchange();
+			_codeExchangeRequest.OnComplete += HandleCodeExchange;
 		}
+
+		protected virtual void HandleCodeExchange() => print(_codeExchangeRequest.IdToken);
 
 		[ContextMenu("Get URI")]
 		public void Test()
