@@ -10,7 +10,7 @@ namespace Azirel.View
 	{
 		event Action OnSignInButtonPressed;
 		IEnumerable<Tuple<string, string>> MainInfo { set; }
-		Texture MainImageProvider { set; }
+		Texture MainImage { set; }
 	}
 
 	public class SignInViewControllerBase : MonoBehaviour, ISignInViewBase
@@ -31,7 +31,7 @@ namespace Azirel.View
 			}
 		}
 
-		public Texture MainImageProvider
+		public Texture MainImage
 		{
 			set => _mainImage.texture = value;
 		}

@@ -1,10 +1,16 @@
 ﻿using Azirel.Config;
 using Azirel.View;
+using Requests;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Threading.Tasks;
 using UnityEngine;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Linq;
+using UnityEngine.Networking;
 
 namespace Azirel.Controllers
 {
@@ -14,7 +20,6 @@ namespace Azirel.Controllers
 		public SignInViewControllerBase ViewImplementation;
 
 		protected ISignInViewBase _view;
-		protected GoogleOAuthCodeExchangeRequest _codeExchangeRequest;
 
 		protected virtual void Start()
 		{
@@ -30,25 +35,59 @@ namespace Azirel.Controllers
 			=> GoogleOAuthConfig.BuildGoogleOAuthUserConsentUri();
 
 		protected virtual void HandleDeeplinkRedirect(string link)
+			=> _ = HandleDeeplinkRedirectAsync(link);
+
+		protected virtual async Task HandleDeeplinkRedirectAsync(string link)
 		{
-			var queriesRawString = link.Replace(GoogleOAuthConfig.RedirectUri, string.Empty);
-			var queriesCollection = QueryStringsUtilities.ConvertStringQueries(queriesRawString);
-			var queriesForCodeExchange = new NameValueCollection()
-			{
-				{ "client_id", GoogleOAuthConfig.ClientID },
-				{ "redirect_uri", GoogleOAuthConfig.RedirectUri },
-				{ "grant_type", "authorization_code" },
-				{ "code",  queriesCollection["code"] }
-			};
-			_codeExchangeRequest = new GoogleOAuthCodeExchangeRequest(queriesForCodeExchange);
-			_codeExchangeRequest.RequestExchange();
-			_codeExchangeRequest.OnComplete += HandleCodeExchange;
+			var code = RetrieveCodeFromRedirectDeeplink(link);
+			var queriesForCodeExchange = BuildGoogleOAuthCodeExchangeQueries(code);
+			var idToken = await ExchangeCodeForIdToken(queriesForCodeExchange);
+			var idTokenInfo = await RequestIdTokenInfo(idToken);
+			ViewTokenInfo(idTokenInfo);
 		}
 
-		protected virtual void HandleCodeExchange() => print(_codeExchangeRequest.IdToken);
+		protected virtual string RetrieveCodeFromRedirectDeeplink(string deeplink)
+		{
+			var queriesRawString = deeplink.Replace(GoogleOAuthConfig.RedirectUri, string.Empty);
+			var queriesCollection = QueryStringsUtilities.ConvertStringQueries(queriesRawString);
+			return queriesCollection["code"];
+		}
 
-		[ContextMenu("Get URI")]
-		public void Test()
-			=> print(BuildOAuthURI().AbsoluteUri);
+		protected virtual NameValueCollection BuildGoogleOAuthCodeExchangeQueries(string code)
+			=> new NameValueCollection()
+				{
+					{ "client_id", GoogleOAuthConfig.ClientID },
+					{ "redirect_uri", GoogleOAuthConfig.RedirectUri },
+					{ "grant_type", "authorization_code" },
+					{ "code",  code }
+				};
+
+		protected virtual async Task<string> ExchangeCodeForIdToken(NameValueCollection queries)
+		{
+			var _codeExchangeRequest = new GoogleOAuthCodeExchangeRequest(queries);
+			await _codeExchangeRequest.RequestExchange();
+			return _codeExchangeRequest.IdToken;
+		}
+
+		protected virtual async Task<string> RequestIdTokenInfo(string idToken)
+		{
+			var _tokenInfoRequest = new GoogleIdTokenInfoRequest(idToken);
+			return await _tokenInfoRequest.RequestIdTokenInfo();			
+		}
+
+		protected virtual void ViewTokenInfo(string tokenInfoJson)
+		{
+			var nameValuePairs = new List<Tuple<string, string>>();
+			foreach (var item in JObject.Parse(tokenInfoJson))
+				nameValuePairs.Add(new Tuple<string, string>(item.Key, item.Value.ToString()));
+			var imagesUris = RetrieveImagesIfExist(nameValuePairs);
+			_view.MainInfo = nameValuePairs;
+			var request = UnityWebRequestTexture.GetTexture(imagesUris.First(), true);
+			request.SendWebRequest().completed += (operation)
+				=> _view.MainImage = ((DownloadHandlerTexture)request.downloadHandler).texture;
+		}
+
+		protected IEnumerable<string> RetrieveImagesIfExist(IEnumerable<Tuple<string, string>> fields)
+			=> fields.Where((field) => field.Item2.EndsWith(".jpg") || field.Item2.EndsWith(".png")).Select((field) => field.Item2);
 	} 
 }
