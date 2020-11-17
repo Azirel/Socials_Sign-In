@@ -1,8 +1,13 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Text;
+using System.Text.RegularExpressions;
 
 public static class QueryStringsUtilities
 {
+	private static readonly Regex _regex = new Regex(@"[?&](\w[\w.]*)=([^?&]+)");
+
 	public static string ConvertQueriesToString(NameValueCollection queries)
 	{
 		var stringBuilder = new StringBuilder();
@@ -14,6 +19,15 @@ public static class QueryStringsUtilities
 		return stringBuilder.ToString();
 	}
 
-	public static NameValueCollection ConvertStringQueries(string queries)
-		=> System.Web.HttpUtility.ParseQueryString(queries);
+	public static NameValueCollection ConvertStringQueries(this Uri uri)
+	{
+		var match = _regex.Match(uri.PathAndQuery);
+		var paramaters = new NameValueCollection();
+		while (match.Success)
+		{
+			paramaters.Add(match.Groups[1].Value, match.Groups[2].Value);
+			match = match.NextMatch();
+		}
+		return paramaters;
+	}	
 }

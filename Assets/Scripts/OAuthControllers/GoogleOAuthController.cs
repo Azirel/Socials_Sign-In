@@ -48,8 +48,7 @@ namespace Azirel.Controllers
 
 		protected virtual string RetrieveCodeFromRedirectDeeplink(string deeplink)
 		{
-			var queriesRawString = deeplink.Replace(GoogleOAuthConfig.RedirectUri, string.Empty);
-			var queriesCollection = QueryStringsUtilities.ConvertStringQueries(queriesRawString);
+			var queriesCollection = QueryStringsUtilities.ConvertStringQueries(new Uri(deeplink));
 			return queriesCollection["code"];
 		}
 
