@@ -453,6 +453,26 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 7975416063187961720, guid: d78af1695213ef34da81a78eafdb4c7c,
+        type: 3}
+      propertyPath: m_ChildControlWidth
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7975416063187961720, guid: d78af1695213ef34da81a78eafdb4c7c,
+        type: 3}
+      propertyPath: m_ChildScaleWidth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7975416063187961720, guid: d78af1695213ef34da81a78eafdb4c7c,
+        type: 3}
+      propertyPath: m_ChildControlHeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7975416063187961720, guid: d78af1695213ef34da81a78eafdb4c7c,
+        type: 3}
+      propertyPath: m_ChildForceExpandHeight
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8946497704281324106, guid: d78af1695213ef34da81a78eafdb4c7c,
         type: 3}
       propertyPath: m_SizeDelta.y
@@ -461,7 +481,7 @@ PrefabInstance:
     - target: {fileID: 9128917047646361605, guid: d78af1695213ef34da81a78eafdb4c7c,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 520
+      value: 880
       objectReference: {fileID: 0}
     - target: {fileID: 9128917047646361605, guid: d78af1695213ef34da81a78eafdb4c7c,
         type: 3}

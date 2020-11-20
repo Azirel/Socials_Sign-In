@@ -8,7 +8,7 @@ public static class QueryStringsUtilities
 {
 	private static readonly Regex _regex = new Regex(@"[?&](\w[\w.]*)=([^?&]+)");
 
-	public static string ConvertQueriesToString(NameValueCollection queries)
+	public static string ConvertQueriesToString(this NameValueCollection queries)
 	{
 		var stringBuilder = new StringBuilder();
 		stringBuilder.Append('?');
