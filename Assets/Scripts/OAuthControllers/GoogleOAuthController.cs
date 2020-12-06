@@ -68,9 +68,9 @@ namespace Azirel.Controllers
 			var nameValuePairs = new List<Tuple<string, string>>();
 			foreach (var item in JObject.Parse(tokenInfoJson))
 				nameValuePairs.Add(new Tuple<string, string>(item.Key, item.Value.ToString()));
-			var imagesUris = RetrieveImagesIfExist(nameValuePairs);
+			var imagesUri = nameValuePairs.Where((tuple) => tuple.Item1 == "picture").First().Item2;
 			_view.MainInfo = nameValuePairs;
-			var textureRequest = new TextureRequest(imagesUris.First());			
+			var textureRequest = new TextureRequest(imagesUri);
 			_view.MainImage = await textureRequest.RequestImage();
 		}
 
