@@ -26,7 +26,7 @@ namespace Requests
 			var queriesString = new NameValueCollection()
 			{
 				{ "client_id", "899582685715-8jrhr9h26gn4fpv2pmdslp1uh0b7dp7n.apps.googleusercontent.com" },
-				{ "redirect_uri", "com.azirel.socials.signup:sign-up" },
+				{ "redirect_uri", "com.azirel.socials.signup" },
 				{ "grant_type", "authorization_code" },
 				{ "code",  code }
 			}.ConvertQueriesToString();

@@ -12,7 +12,7 @@ namespace Azirel.Config
 		public string Scope = "email%20profile";
 		public string ResponseType = "code";
 		public string ClientID = "899582685715-8jrhr9h26gn4fpv2pmdslp1uh0b7dp7n.apps.googleusercontent.com";
-		public string RedirectUri = "com.azirel.socials.signup://sign-up";
+		public string RedirectUri = "com.azirel.socials.signup";
 
 		public Uri BuildGoogleOAuthUserConsentUri() => new Uri($"{UserConsentUri}{GetQueries()}");
 
