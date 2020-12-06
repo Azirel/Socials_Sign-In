@@ -53,7 +53,7 @@ namespace Azirel.Controllers
 
 		protected virtual async Task<string> ExchangeCodeForIdToken(string code)
 		{
-			var _codeExchangeRequest = new GoogleOAuthCodeForIdTokenExchangeRequest(code);
+			var _codeExchangeRequest = new GoogleOAuthCodeForIdTokenExchangeRequest(GoogleOAuthConfig.GetQueriesForCodeExchange(), code);
 			return await _codeExchangeRequest.RequestIdToken();
 		}
 

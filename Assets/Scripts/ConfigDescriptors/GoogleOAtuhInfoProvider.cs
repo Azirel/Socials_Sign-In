@@ -12,14 +12,15 @@ namespace Azirel.Config
 		public string Scope = "email%20profile";
 		public string ResponseType = "code";
 		public string ClientID = "899582685715-8jrhr9h26gn4fpv2pmdslp1uh0b7dp7n.apps.googleusercontent.com";
-		public string RedirectUri = "com.azirel.socials.signup";
+		public string RedirectUri = "";
+		public string GrantType = "authorization_code";
 
-		public Uri BuildGoogleOAuthUserConsentUri() => new Uri($"{UserConsentUri}{GetQueries()}");
+		public Uri BuildGoogleOAuthUserConsentUri() => new Uri($"{UserConsentUri}{GetQueriesAsString()}");
 
-		protected virtual string GetQueries()
-			=> QueryStringsUtilities.ConvertQueriesToString(BuildQueries());
+		public virtual string GetQueriesAsString()
+			=> QueryStringsUtilities.ConvertQueriesToString(GetQueriesForConsentUri());
 
-		protected NameValueCollection BuildQueries()
+		public virtual NameValueCollection GetQueriesForConsentUri()
 			=> new NameValueCollection()
 			{
 				{ "scope", Scope },
@@ -27,5 +28,13 @@ namespace Azirel.Config
 				{ "client_id", ClientID },
 				{ "redirect_uri", RedirectUri }
 			};
-	} 
+
+		public virtual NameValueCollection GetQueriesForCodeExchange()
+			=> new NameValueCollection()
+			{
+				{ "client_id", ClientID },
+				{ "redirect_uri", RedirectUri },
+				{ "grant_type", GrantType }
+			};
+	}
 }

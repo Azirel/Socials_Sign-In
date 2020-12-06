@@ -21,15 +21,19 @@ namespace Requests
 				return reader.ReadToEnd();
 		}
 
-		public GoogleOAuthCodeForIdTokenExchangeRequest(string code)
+		public GoogleOAuthCodeForIdTokenExchangeRequest(NameValueCollection queries)
 		{
-			var queriesString = new NameValueCollection()
-			{
-				{ "client_id", "899582685715-8jrhr9h26gn4fpv2pmdslp1uh0b7dp7n.apps.googleusercontent.com" },
-				{ "redirect_uri", "com.azirel.socials.signup" },
-				{ "grant_type", "authorization_code" },
-				{ "code",  code }
-			}.ConvertQueriesToString();
+			var queriesString = queries.ConvertQueriesToString();
+			var tokenExchangeUri = new Uri($"https://oauth2.googleapis.com/token{queriesString}");
+			_request = HttpWebRequest.CreateHttp(tokenExchangeUri);
+			_request.Method = "POST";
+			_request.ContentLength = 0;
+		}
+
+		public GoogleOAuthCodeForIdTokenExchangeRequest(NameValueCollection queries, string code)
+		{
+			queries.Add("code", code);
+			var queriesString = queries.ConvertQueriesToString();
 			var tokenExchangeUri = new Uri($"https://oauth2.googleapis.com/token{queriesString}");
 			_request = HttpWebRequest.CreateHttp(tokenExchangeUri);
 			_request.Method = "POST";

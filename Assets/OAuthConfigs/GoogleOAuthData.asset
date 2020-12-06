@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3d9189595185f54b897da684cc88354, type: 3}
   m_Name: GoogleOAuthData
   m_EditorClassIdentifier: 
-  Uri: https://accounts.google.com/o/oauth2/v2/auth
+  UserConsentUri: https://accounts.google.com/o/oauth2/v2/auth
   Scope: email%20profile
   ResponseType: code
-  ClientID: 899582685715-8jrhr9h26gn4fpv2pmdslp1uh0b7dp7n.apps.googleusercontent.com
-  RedirectUri: com.azirel.socials.signup:sign-up
+  ClientID: 899582685715-bi3u9oqc6b6820qfc0sglc48t6m7skmr.apps.googleusercontent.com
+  RedirectUri: 'com.wear.publictestapp:'
+  GrantType: authorization_code
